@@ -2,29 +2,26 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux';
-import { BrowserRouter, Route  } from 'react-router-dom';
+import { BrowserRouter, Route, Switch  } from 'react-router-dom';
+import promise from 'redux-promise'
 
-import App from './components/app';
+
 import reducers from './reducers';
+import PostIndex from './components/PostIndex';
+import PostNew from './components/PostNew';
+import PostShow from './components/PostShow';
 
-
-//Create two different routes the user can visit and based on the route,
-class Hello extends React.Component {
-  render() { return <div>Hello</div> }
-}
-
-class Goodbye extends React.Component {
-  render() { return <div>Goodbye</div> }
-}
-// Show slightly different content
-const createStoreWithMiddleware = applyMiddleware()(createStore);
+const createStoreWithMiddleware = applyMiddleware(promise)(createStore);
 
 ReactDOM.render(
   <Provider store={createStoreWithMiddleware(reducers)}>
     <BrowserRouter>
       <div>
-        <Route path='/hello' component={Hello} />
-        <Route path='/goodbye' component={Goodbye}/>
+        <Switch>
+          <Route path='/posts/new' component={PostNew} />
+          <Route path='/posts/:id' component={PostShow} />
+          <Route path='/' component={PostIndex} />
+        </Switch>
       </div>
     </BrowserRouter>
   </Provider>
